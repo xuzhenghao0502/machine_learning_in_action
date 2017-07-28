@@ -1,4 +1,5 @@
 import numpy as np
+import types
 
 def file2dataset(filename = ''):
     """invert the txt file into a certain type of python dataset"""
@@ -41,14 +42,21 @@ def file2dataset(filename = ''):
 
         #create an empty numpy matrix to save the dataset
         return_mat = np.zeros((number_of_datasets, number_of_elements))
-        mat_row_index = 0
+        return_list = []
+        list_row_index = 0
         for line in lines_no_space:
-            mat_row, number_of_elements = deal_row(lines_no_space[mat_row_index], ',')
-            return_mat[mat_row_index, :] = mat_row[:]
-            mat_row_index += 1
+            list_row, number_of_elements = deal_row(lines_no_space[list_row_index], ',')
+
+            return_list.append(list_row)
+
+            list_row_index += 1
+
 
         #end process
         input_finish = True
+        print(return_list)
+        return return_list
+
 
 def deal_row(string, delimiter):
     """return the processed row of data and the number of features of each row"""
@@ -58,12 +66,18 @@ def deal_row(string, delimiter):
         delimiter_position = string.find(delimiter)
         if delimiter_position != -1:
             element_to_append = string[0:delimiter_position]
+            print(type(element_to_append))
+            print(element_to_append.isdigit())
             if element_to_append != '':
+                if element_to_append.isdigit():
+                    element_to_append = float(element_to_append)
                 list_of_row.append(element_to_append)
                 number_of_element += 1
                 string = string[delimiter_position + 1:]
         else:
             if string != '':
+                if string.isdigit():
+                    string = float(string)
                 element_to_append = string
                 list_of_row.append(element_to_append)
                 number_of_element += 1
